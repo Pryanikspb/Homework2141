@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Arrays;
+
 public class IntegerListImpl implements IntegerList {
         private static final int DEFAULT_SIZE = 15;
 
@@ -60,8 +62,37 @@ public class IntegerListImpl implements IntegerList {
 
         @Override
         public boolean contains(Integer item) {
-            return indexOf(item) != -1;
+            checkItem(item);
+            Integer[] copy = toArray();
+            sortInsertion(copy);
+
+            int min = 0;
+            int max = copy.length - 1;
+            while (min<= max) {
+                int mid = (min + max) / 2;
+                if (item.equals(copy[mid])) {
+                    return true;
+                }
+                if (item < copy[mid]) {
+                    max = mid - 1;
+                } else {
+                    min = mid + 1;
+                }
+            }
+            return false;
         }
+
+    private void sortInsertion(Integer[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int temp = arr[i];
+            int j = i;
+            while (j > 0 && arr[j - 1] >= temp) {
+                arr[j] = arr[j - 1];
+                j--;
+            }
+            arr[j] = temp;
+        }
+    }
 
         @Override
         public int indexOf(Integer item) {
